@@ -1,6 +1,7 @@
 # Root-level .gitignore
 /client/node_modules/
 /server/node_modules/
+/server/.env/
 *.log
 .env
 
