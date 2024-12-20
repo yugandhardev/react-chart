@@ -20,7 +20,6 @@ const Register = () => {
     setUser((user) => ({ ...user, [e.target.name]: e.target.value }));
   };
   function validation() {
-    debugger;
     const { name, email, password, confirmPassword } = user;
     if (!password || password.length < 3) {
       toast.error("password should be Minimum 3 characters", toastOptions);
