@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/moving.png";
 import logo1 from "../assets/road.png";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { API } from "../utility/APIutility";
 const Register = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -20,7 +23,6 @@ const Register = () => {
     setUser((user) => ({ ...user, [e.target.name]: e.target.value }));
   };
   function validation() {
-    debugger;
     const { name, email, password, confirmPassword } = user;
     if (!password || password.length < 3) {
       toast.error("password should be Minimum 3 characters", toastOptions);
@@ -38,14 +40,25 @@ const Register = () => {
       toast.error("Email is Required", toastOptions);
       return false;
     } else {
-      toast.success("Regisration success", toastOptions);
       return true;
     }
   }
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     e.preventDefault();
     if (validation()) {
-      console.log("API calling");
+      const { name, email, password } = user;
+      const res = await axios.post(API + "/auth/register", {
+        name,
+        email,
+        password,
+      });
+      console.log(res);
+      if (res.data.status === false) {
+        toast.error(res.message);
+      } else {
+        toast.success(res.message);
+        navigate("/login");
+      }
     }
   };
 
