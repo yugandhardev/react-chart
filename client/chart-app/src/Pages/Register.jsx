@@ -47,17 +47,17 @@ const Register = () => {
     e.preventDefault();
     if (validation()) {
       const { name, email, password } = user;
-      const res = await axios.post(API + "/auth/register", {
-        name,
-        email,
-        password,
-      });
-      console.log(res);
-      if (res.data.status === false) {
-        toast.error(res.message);
-      } else {
-        toast.success(res.message);
+      try {
+        const { data } = await axios.post(API + "/auth/register", {
+          name,
+          email,
+          password,
+        });
+        toast.success(data.message);
         navigate("/login");
+      } catch (err) {
+        toast.error(err.response.data.message);
+        setUser({ name: "", email: "", password: "", confirmPassword: "" });
       }
     }
   };
@@ -87,7 +87,7 @@ const Register = () => {
           type="password"
           onChange={(e) => handleInput(e)}
           placeholder="Password"
-          value={user.passwoed}
+          value={user.password}
           name="password"
         />
         <input

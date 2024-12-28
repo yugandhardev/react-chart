@@ -36,15 +36,17 @@ const Login = () => {
     e.preventDefault();
     if (validation()) {
       const { email, password } = user;
-      const res = await axios.post(API + "/auth/login", {
-        email,
-        password,
-      });
-      if (res.data.status === false) {
-        toast.error(res.message, toastOptions);
-      } else {
-        toast.success(res.message, toastOptions);
-        navigate("/");
+      try {
+        const { data } = await axios.post(API + "/auth/login", {
+          email,
+          password,
+        });
+        toast.success(data.message, toastOptions);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/setavatar");
+      } catch (err) {
+        toast.error(err.response.data.message, toastOptions);
+        setUser({ email: "", password: "" });
       }
     }
   };

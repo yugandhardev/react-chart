@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
     min: 25,
+    //select: false,
   },
   isAvatarImageSet: {
     type: Boolean,
@@ -27,4 +28,9 @@ const userSchema = new mongoose.Schema({
     default: "",
   },
 });
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
 module.exports = mongoose.model("Users", userSchema);
